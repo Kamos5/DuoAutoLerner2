@@ -27,7 +27,7 @@ def sendPost():
     return response
 
 
-def sendPut(response):
+def sendPut(response, seriesIndex=1):
     extenderString = {"heartsLeft": 3,
                       "startTime": 1716384284,
                       "enableBonusPoints": 'false',
@@ -48,8 +48,8 @@ def sendPut(response):
     suffixPart = str(extenderString)[1:].replace('\'','\"')
     # print(suffixPart)
     preTimeJson = prefixPart[0:-1] + '' + suffixPart + ''
-    timeEnd = int(time.time())
-    timeStart = timeEnd - 1000
+    timeEnd = int(time.time() - 1000*(seriesIndex-1))
+    timeStart = timeEnd - 1000*seriesIndex
     preJson1 = preTimeJson.replace(preTimeJson[preTimeJson.find("startTime"):preTimeJson.find("startTime")+22], 'startTime": ' + str(timeStart))
     preJson2 = preJson1.replace(preJson1[preJson1.find("endTime"):preJson1.find("endTime")+20], 'endTime": ' + str(timeEnd)).replace('\"false\"', 'false').replace('\"true\"', 'true')
 
@@ -81,5 +81,6 @@ def sendPut(response):
 
     return
 
-
-sendPut(sendPost())
+series = 2
+for i in range(series):
+    sendPut(sendPost(),i)
